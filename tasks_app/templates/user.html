@@ -1,0 +1,33 @@
+<h1>Welcome {{username}}!</h1> <button>⚙ Account</button> 
+<a href="{% url 'completed_tasks' user.id %}"><button>Completed Tasks</button></a>
+<a href="{% url 'index' %}"><button>Log out</button></a>
+<p></p>
+<p><h2>Tasks</h2></p>
+<a href="/{{user.id}}/create"><button>
+    Create Task
+</button></a>
+{% for task in tasks %}
+
+<p><h3> {{task.name}} : {{task.description}}</h3></p>
+
+<p> Due to: {{task.deadline}}</p>
+
+<p style="margin-left: 100px;">
+<div style="display: flex; gap: 10px; align-items: center;">
+    <form method="POST" action="{% url 'complete_task' user.id task.id %}">
+        {% csrf_token %}
+        <button type="submit" style="width: 90px;">✅ Done</button>
+    </form>
+
+    <a href="{% url 'modify_task' user.id task.id %}">
+        <button style="width: 90px;">Update</button>
+    </a>
+
+    <form method="POST" action="{% url 'delete_task' user.id task.id %}">
+        {% csrf_token %}
+        <button type="submit" style="width: 90px;">Delete</button>
+    </form>
+</div>
+
+{% endfor %}
+
