@@ -11,16 +11,8 @@ def user_tasks(request, user_id):
     tasks = user.tasks.filter(completed = False)
     tasks_list = list()
 
-    """
-    for task in tasks:
-        t = task.deadline
-        t = t.strftime('%Y/%m/%d')
-        tasks_list.append([task.name, task.description, t])
-    """
-    
-    # return HttpResponse(f"{user.username}'s Tasks: {tasks_list}")
     return render(request, "user.html", {
-        'username':  user,
+        'user':  user,
         'tasks': tasks
     })
 
@@ -30,7 +22,7 @@ def completed_tasks(request, user_id):
     tasks_list = list()
     
     return render(request, "completed.html", {
-        'username':  user,
+        'user':  user,
         'tasks': tasks
     })
     
@@ -58,6 +50,7 @@ def create_task(request, user_id):
     user = get_object_or_404(User, id = user_id)
     if request.method == "GET":
         return render(request, "create_task.html", {
+        'user': user,
         'form': DoTasks()
     })
     else:
@@ -75,10 +68,18 @@ def complete_task(request, user_id, task_id):
     task.save()
     return redirect(f'/{user_id}')
 
+def uncomplete_task(request, user_id, task_id):
+    task = get_object_or_404(Task, id = task_id)
+    task.completed = False
+    task.save()
+    return redirect(f'/{user_id}/completed_tasks')
+
 def modify_task(request, user_id, task_id):
+    user = get_object_or_404(User, id = user_id)
     task = get_object_or_404(Task, id = task_id)
     if request.method == 'GET':
         return render(request, "modify_task.html", {
+            'user': user,
             'form': DoTasks(initial={
                 'name' : task.name,
                 'description' : task.description,
@@ -93,3 +94,9 @@ def modify_task(request, user_id, task_id):
 
             task.save()
             return redirect(f"/{user_id}")
+
+def return_to_users(request):
+    return redirect("/")
+
+def return_to_tasks(request, user_id):
+    return redirect(f"/{user_id}")

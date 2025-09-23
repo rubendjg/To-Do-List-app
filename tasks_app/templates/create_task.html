@@ -1,11 +1,11 @@
-<h1>Create New Task</h1>
+<h1>Create New Task</h1> 
 
 <form method ="POST">
     {% csrf_token %}
     {{form}}
     <p></p>
-    <button>
-        Create
-    </button>
-
+    <button>Create</button>
 </form>
+<a href="{% url 'return_to_tasks' user.id %}">
+    <button> Return </button>
+</a>

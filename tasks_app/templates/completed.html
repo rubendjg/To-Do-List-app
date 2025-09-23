@@ -1,4 +1,4 @@
-<h1>{{username}}: Completed Tasks</h1> <button>⚙ Account</button> 
+<h1>{{user}}: Completed Tasks</h1> <button>⚙ Account</button> 
 <a href="{% url 'main' user.id %}"><button>Unfinished Tasks</button></a>
 <a href="{% url 'index' %}"><button>Log out</button></a>
 <p></p>
@@ -10,7 +10,7 @@
 
 <p style="margin-left: 100px;">
 <div style="display: flex; gap: 10px; align-items: center;">
-    <form method="POST" action="{% url 'complete_task' user.id task.id %}">
+    <form method="POST" action="{% url 'uncomplete_task' user.id task.id %}">
         {% csrf_token %}
         <button type="submit" style="width: 90px;">Uncomplete</button>
     </form>
