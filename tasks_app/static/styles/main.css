@@ -1,0 +1,10 @@
+img.action-icon,
+input[type="image"].action-icon {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+img.action-icon:hover,
+input[type="image"].action-icon:hover {
+    transform: scale(1.2);
+}

@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import User, Task
 from .forms import DoTasks, DoUsers
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 def index(request): 
@@ -38,7 +39,7 @@ def create_user(request):
     
 def user_login(request):
     if request.method == "GET":
-        return render(request, "create_user.html", {
+        return render(request, "login.html", {
             'form': DoUsers()
         })
     else:
@@ -56,11 +57,12 @@ def create_task(request, user_id):
     else:
         Task.objects.create(name = request.POST['name'], description = request.POST['description'], deadline = request.POST['deadline'], user = user)
         return redirect(f'/{user_id}')
-    
+ 
 def delete_task(request, user_id, task_id):
     task = get_object_or_404(Task, id = task_id)
     task.delete()
-    return redirect(f'/{user_id}')
+    referer = request.META.get('HTTP_REFERER')
+    return HttpResponseRedirect(referer)
 
 def complete_task(request, user_id, task_id):
     task = get_object_or_404(Task, id = task_id)
@@ -74,7 +76,9 @@ def uncomplete_task(request, user_id, task_id):
     task.save()
     return redirect(f'/{user_id}/completed_tasks')
 
-def modify_task(request, user_id, task_id):
+def modify_task(request, user_id, task_id, completed):
+    # Completed signals if the user is in the completed or uncompleted tasks: 0 = uncompleted, 1 = completed
+
     user = get_object_or_404(User, id = user_id)
     task = get_object_or_404(Task, id = task_id)
     if request.method == 'GET':
@@ -92,8 +96,11 @@ def modify_task(request, user_id, task_id):
             task.description = form.cleaned_data['description']
             task.deadline = form.cleaned_data['deadline']
 
-            task.save()
-            return redirect(f"/{user_id}")
+            task.save
+            if (completed == 0):
+                return redirect(f"/{user_id}")
+            else:
+                return redirect(f"/{user_id}/completed_tasks")
 
 def return_to_users(request):
     return redirect("/")

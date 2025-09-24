@@ -1,3 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+
 <h1>{{user}}: Completed Tasks</h1> <button>⚙ Account</button> 
 <a href="{% url 'main' user.id %}"><button>Unfinished Tasks</button></a>
 <a href="{% url 'index' %}"><button>Log out</button></a>
@@ -12,16 +16,16 @@
 <div style="display: flex; gap: 10px; align-items: center;">
     <form method="POST" action="{% url 'uncomplete_task' user.id task.id %}">
         {% csrf_token %}
-        <button type="submit" style="width: 90px;">Uncomplete</button>
+        <input type = "image" class="action-icon" src="{% static 'Descompletado.png' %}" alt="Delete" width="90">
     </form>
 
-    <a href="{% url 'modify_task' user.id task.id %}">
-        <button style="width: 90px;">Update</button>
+    <a href="{% url 'modify_task' user.id task.id 1 %}">
+        <img class="action-icon" src="{% static 'Modificar.png' %}" alt="Update" width="90">
     </a>
 
     <form method="POST" action="{% url 'delete_task' user.id task.id %}">
         {% csrf_token %}
-        <button type="submit" style="width: 90px;">Delete</button>
+        <input type = "image" class="action-icon" src="{% static 'Eliminar.png' %}" alt="Delete" width="90">
     </form>
 </div>
 

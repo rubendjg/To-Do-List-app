@@ -1,3 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+
 <h1>Welcome {{user}}!</h1> <button>⚙ Account</button> 
 <a href="{% url 'completed_tasks' user.id %}"><button>Completed Tasks</button></a>
 <a href="{% url 'index' %}"><button>Log out</button></a>
@@ -10,22 +14,22 @@
 
 <p><h3> {{task.name}} : {{task.description}}</h3></p>
 
-<p> Due to: {{task.deadline}}</p>
+<p>Due to: {{task.deadline}}</p>
 
-<p style="margin-left: 100px;">
+
 <div style="display: flex; gap: 10px; align-items: center;">
     <form method="POST" action="{% url 'complete_task' user.id task.id %}">
         {% csrf_token %}
-        <button type="submit" style="width: 90px;">✅ Done</button>
+        <input type = "image" class="action-icon" src="{% static 'Completado.png' %}" alt="Complete" width="90">
     </form>
 
-    <a href="{% url 'modify_task' user.id task.id %}">
-        <button style="width: 90px;">Update</button>
+    <a href="{% url 'modify_task' user.id task.id 0 %}">
+        <img class="action-icon" src="{% static 'Modificar.png' %}" alt="Update" width="90">
     </a>
 
     <form method="POST" action="{% url 'delete_task' user.id task.id %}">
         {% csrf_token %}
-        <button type="submit" style="width: 90px;">Delete</button>
+        <input type = "image" class="action-icon" src="{% static 'Eliminar.png' %}" alt="Delete" width="90  ">
     </form>
 </div>
 

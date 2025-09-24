@@ -1,8 +1,10 @@
 {% load static %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+
 <img src="{% static 'ToDo.png' %}" style="width: 200px;">
 
 <h1>Welcome to your To-Do List!</h1>
 
-<a href="login"><button> Login </button></a>
+<a href="{% url 'login' %}"><input type = "image" class="action-icon" src="{% static 'Log in.png' %}" alt="Log in" width="250"></a>
 <a href="{% url 'new_user' %}"><button> Sign Up </button></a>
