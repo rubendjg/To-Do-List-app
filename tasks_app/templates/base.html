@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Completed Tasks</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+
+    <style>
+    body {
+        margin: 20;
+        min-height: 100vh;
+        background-color: #5c008a;
+        background-image: url("{% static 'patterns/fabric-plaid.png' %}");
+        background-repeat: repeat;
+        font-family: 'Roboto Mono', monospace;
+        color: #000000;
+    }
+    </style>
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

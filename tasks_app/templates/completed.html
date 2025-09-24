@@ -1,6 +1,7 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+{% block content %}
 
 <h1>{{user}}: Completed Tasks</h1> <button>⚙ Account</button> 
 <a href="{% url 'main' user.id %}"><button>Unfinished Tasks</button></a>
@@ -30,4 +31,8 @@
 </div>
 
 {% endfor %}
+
+{% endblock %}
+
+
 

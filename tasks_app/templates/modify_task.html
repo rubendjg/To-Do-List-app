@@ -1,3 +1,8 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
 <h1>Modify Task</h1>
 
 <form method ="POST">
@@ -12,3 +17,5 @@
 <a href="{% url 'return_to_tasks' user.id %}">
     <button> Return </button>
 </a>
+
+{% endblock %}
