@@ -77,7 +77,7 @@ def uncomplete_task(request, user_id, task_id):
     return redirect(f'/{user_id}/completed_tasks')
 
 def modify_task(request, user_id, task_id, completed):
-    # Completed signals if the user is in the completed or uncompleted tasks: 0 = uncompleted, 1 = completed
+    # Completed refers if the user is in the completed or uncompleted tasks: 0 = uncompleted, 1 = completed
 
     user = get_object_or_404(User, id = user_id)
     task = get_object_or_404(Task, id = task_id)
@@ -96,7 +96,7 @@ def modify_task(request, user_id, task_id, completed):
             task.description = form.cleaned_data['description']
             task.deadline = form.cleaned_data['deadline']
 
-            task.save
+            task.save()
             if (completed == 0):
                 return redirect(f"/{user_id}")
             else:

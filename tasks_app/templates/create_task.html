@@ -1,18 +1,67 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Create Task - To-Do App{% endblock %}
+
 {% block content %}
+<div class="form-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="form-card">
+                    <div class="text-center mb-4">
+                        <div class="form-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <h2 class="form-title">Create New Task</h2>
+                        <p class="form-subtitle">Add a new task to your to-do list</p>
+                    </div>
 
-<h1>Create New Task</h1> 
+                    <form method="POST" class="task-form">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_name" class="form-label">Task Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-tasks"></i>
+                                </span>
+                                {{ form.name }}
+                            </div>
+                        </div>
 
-<form method ="POST">
-    {% csrf_token %}
-    {{form}}
-    <p></p>
-    <button>Create</button>
-</form>
-<a href="{% url 'return_to_tasks' user.id %}">
-    <button> Return </button>
-</a>
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label">Description</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-align-left"></i>
+                                </span>
+                                {{ form.description }}
+                            </div>
+                        </div>
 
+                        <div class="mb-4">
+                            <label for="id_deadline" class="form-label">Deadline</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </span>
+                                {{ form.deadline }}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-plus me-2"></i>Create Task
+                            </button>
+                            <a href="{% url 'return_to_tasks' user.id %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Tasks
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
