@@ -6,18 +6,16 @@
 <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
 
 <div style="display: flex; flex-direction: column; align-items: center; margin-top: 120px;">
-    
+    <p></p><p></p><p></p>
     <img src="{% static 'To do.png' %}" style="width: 1200px; max-width: 90%;">
-
-    <div style="margin-top: 60px; display: flex; flex-direction: column; gap: 30px; align-items: center;">
+    
+    <div style="margin-top: 60px; display: flex; flex-direction: row; gap: 60px; align-items: center;">
         <a href="{% url 'login' %}">
-            <img class="action-icon" src="{% static 'Login.png' %}" alt="Log in" width="250">
+            <img class="action-icon" src="{% static 'Log in.png' %}" alt="Log in" width="250">
         </a>
 
         <a href="{% url 'new_user' %}">
-            <button style="padding: 12px 36px; font-size: 20px; border-radius: 10px; cursor: pointer;">
-                Sign Up
-            </button>
+            <img class="action-icon" src="{% static 'Sign Up.png' %}" alt="Sign Up" width="250">
         </a>
     </div>
 </div>
