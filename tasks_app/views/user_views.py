@@ -56,9 +56,7 @@ def modify_user(request, user_id, completed):
                 return redirect(f'/{user_id}/completed_tasks')
 
 # It deletes the respective user from the database
-def delete_user(request, user_id, user_password):
+def delete_user(request, user_id):
     user = get_object_or_404(User, id = user_id)
-    if user_password == user.password:
-        user.delete()
-        return redirect("/")
-    return 
+    user.delete()
+    return redirect("/")
