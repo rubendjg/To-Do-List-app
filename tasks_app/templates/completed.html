@@ -1,37 +1,139 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Completed Tasks - {{user.username}}{% endblock %}
+
 {% block content %}
+<!-- Professional Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold" href="">
+            <i class="fas fa-check-circle me-2"></i>To Do - Completed
+        </a>
+        
+        <div class="navbar-nav ms-auto">
+            <div class="dropdown">
+                <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-user me-2"></i>{{user.username}}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="{% url 'modify_user' user.id 1 %}"><i class="fas fa-cog me-2"></i>Account Settings</a></li>
+                    <li><a class="dropdown-item" href="{% url 'main' user.id %}"><i class="fas fa-tasks me-2"></i>Active Tasks</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'index' %}"><i class="fas fa-sign-out-alt me-2"></i>Log Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
 
-<h1>{{user}}: Completed Tasks</h1> <button>⚙ Account</button> 
-<a href="{% url 'main' user.id %}"><button>Unfinished Tasks</button></a>
-<a href="{% url 'index' %}"><button>Log out</button></a>
-<p></p>
-<p><h2>Tasks</h2></p>
-{% for task in tasks %}
+<!-- Main Dashboard Content -->
+<div class="dashboard-bg">
+    <div class="container py-4">
+        <!-- Welcome Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="welcome-card completed-header">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="welcome-title mb-2">
+                                <i class="fas fa-trophy text-warning me-2"></i>
+                                Great job, {{user.username}}!
+                            </h1>
+                            <p class="welcome-subtitle mb-0">Here are all your completed tasks - well done!</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="task-counter completed-counter">
+                                <span class="counter-number">{{tasks|length}}</span>
+                                <span class="counter-label">Completed Tasks</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<p><h3> {{task.name}} :   {{task.description}}</h3></p>
-<p> Due to: {{task.deadline}}</p>
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="action-section">
+                    <a href="{% url 'main' user.id %}" class="btn btn-primary btn-lg shadow-sm me-3">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Active Tasks
+                    </a>
 
-<p style="margin-left: 100px;">
-<div style="display: flex; gap: 10px; align-items: center;">
-    <form method="POST" action="{% url 'uncomplete_task' user.id task.id %}">
-        {% csrf_token %}
-        <input type = "image" class="action-icon" src="{% static 'Descompletado.png' %}" alt="Delete" width="90">
-    </form>
+                </div>
+            </div>
+        </div>
 
-    <a href="{% url 'modify_task' user.id task.id 1 %}">
-        <img class="action-icon" src="{% static 'Modificar.png' %}" alt="Update" width="90">
-    </a>
+        <!-- Completed Tasks Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="section-header mb-4">
+                    <h2 class="section-title">
+                        <i class="fas fa-check-double me-2"></i>Completed Tasks
+                    </h2>
+                </div>
 
-    <form method="POST" action="{% url 'delete_task' user.id task.id %}">
-        {% csrf_token %}
-        <input type = "image" class="action-icon" src="{% static 'Eliminar.png' %}" alt="Delete" width="90">
-    </form>
+                {% if tasks %}
+                    <div class="tasks-grid">
+                        {% for task in tasks %}
+                        <div class="task-card completed-task-card">
+                            <div class="completed-badge">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Completed</span>
+                            </div>
+                            
+                            <div class="task-header">
+                                <h5 class="task-title completed-title">{{task.name}}</h5>
+                            </div>
+                            
+                            <div class="task-body">
+                                <p class="task-description completed-description">{{task.description}}</p>
+                                <div class="task-meta">
+                                    <div class="due-date completed-due-date">
+                                        <i class="fas fa-calendar-check me-2"></i>
+                                        <span>Was due: {{task.deadline}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Keep your original action icons with completed task styling -->
+                            <div class="task-actions completed-actions">
+                                <form method="POST" action="{% url 'uncomplete_task' user.id task.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="image" class="action-icon uncomplete-icon" src="{% static 'descompletado.png' %}" alt="Uncomplete" width="90" title="Mark as Incomplete">
+                                </form>
+
+                                <a href="{% url 'modify_task' user.id task.id 1 %}">
+                                    <img class="action-icon" src="{% static 'Modificar.png' %}" alt="Update" width="90" title="Edit Task">
+                                </a>
+
+                                <form method="POST" action="{% url 'delete_task' user.id task.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="image" class="action-icon delete-icon" src="{% static 'eliminar.png' %}" alt="Delete" width="90" onclick="return confirm('Are you sure you want to permanently delete this completed task?')" title="Delete Task">
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="text-center py-5">
+                            <div class="empty-icon mb-4">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <h3 class="empty-title mb-3">No completed tasks yet!</h3>
+                            <p class="empty-text mb-4">Complete some tasks to see them here and track your progress.</p>
+                            <a href="{% url 'main' user.id %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-tasks me-2"></i>View Active Tasks
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
-
-{% endfor %}
-
 {% endblock %}
 
 

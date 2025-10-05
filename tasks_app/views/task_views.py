@@ -1,52 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import User, Task
-from .forms import DoTasks, DoUsers
+from ..models import User, Task
+from ..forms import DoTasks
 from django.http import HttpResponseRedirect
 
-# Create your views here.
-def index(request): 
-    return render(request, "index.html")
+# |TASKS RELATED VIEWS|
 
-def user_tasks(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    tasks = user.tasks.filter(completed = False)
-    tasks_list = list()
-
-    return render(request, "user.html", {
-        'user':  user,
-        'tasks': tasks
-    })
-
-def completed_tasks(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    tasks = user.tasks.filter(completed = True)
-    tasks_list = list()
-    
-    return render(request, "completed.html", {
-        'user':  user,
-        'tasks': tasks
-    })
-    
-def create_user(request):
-    if request.method == "GET":
-        return render(request, "create_user.html", {
-            'form': DoUsers()
-        })
-    else:
-        User.objects.create(username = request.POST['username'], password = request.POST['password'])
-        user = User.objects.get(username = request.POST['username'], password = request.POST['password'])
-        return redirect(f'/{user.id}')
-    
-def user_login(request):
-    if request.method == "GET":
-        return render(request, "login.html", {
-            'form': DoUsers()
-        })
-    else:
-        user = User.objects.get(username = request.POST['username'], password = request.POST['password'])
-        return redirect(f'/{user.id}')
-
-# Creating a task from the user input
+# Creates a task from users input
 def create_task(request, user_id):
     user = get_object_or_404(User, id = user_id)
     if request.method == "GET":
@@ -58,26 +17,40 @@ def create_task(request, user_id):
         Task.objects.create(name = request.POST['name'], description = request.POST['description'], deadline = request.POST['deadline'], user = user)
         return redirect(f'/{user_id}')
  
+# Deletes the specified task by the user
 def delete_task(request, user_id, task_id):
     task = get_object_or_404(Task, id = task_id)
     task.delete()
     referer = request.META.get('HTTP_REFERER')
     return HttpResponseRedirect(referer)
 
+""" 
+Completes the specified task by the user from the uncompleted tasks view
+Changes its state to Complete, and allows it to be visualize in the "completed tasks" view
+"""
 def complete_task(request, user_id, task_id):
     task = get_object_or_404(Task, id = task_id)
     task.completed = True
     task.save()
     return redirect(f'/{user_id}')
 
+""" 
+Uncompletes the specified task by the user from the completed tasks view
+Changes its state to Uncomplete, and allows it to be visualize in the "uncompleted tasks" view
+"""
 def uncomplete_task(request, user_id, task_id):
     task = get_object_or_404(Task, id = task_id)
     task.completed = False
     task.save()
     return redirect(f'/{user_id}/completed_tasks')
 
+""" 
+Modify the specified task by the user
+A task can be modifed form the uncompleted or completed tasks
+It only modifies the fields with changes, is nothing is changed the task remains the same
+"""
 def modify_task(request, user_id, task_id, completed):
-    # Completed signals if the user is in the completed or uncompleted tasks: 0 = uncompleted, 1 = completed
+    # Completed references where the functions is called: 0 =  from uncompleted tasks, 1 = from completed tasks
 
     user = get_object_or_404(User, id = user_id)
     task = get_object_or_404(Task, id = task_id)
@@ -88,7 +61,8 @@ def modify_task(request, user_id, task_id, completed):
                 'name' : task.name,
                 'description' : task.description,
                 'deadline' : task.deadline
-            })})
+            })
+        })
     else:
         form = DoTasks(request.POST)
         if form.is_valid():
@@ -96,14 +70,8 @@ def modify_task(request, user_id, task_id, completed):
             task.description = form.cleaned_data['description']
             task.deadline = form.cleaned_data['deadline']
 
-            task.save
+            task.save()
             if (completed == 0):
                 return redirect(f"/{user_id}")
             else:
                 return redirect(f"/{user_id}/completed_tasks")
-
-def return_to_users(request):
-    return redirect("/")
-
-def return_to_tasks(request, user_id):
-    return redirect(f"/{user_id}")
