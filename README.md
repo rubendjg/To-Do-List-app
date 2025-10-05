@@ -190,7 +190,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Bootstrap Team** for the responsive CSS framework
 - **Font Awesome** for the beautiful icons
 - **Google Fonts** for the retro typography
-- **Pixel Art Community** for design inspiration
+- **Aseprite** for the great tool for creating pixel art
 
 ## 📞 Contact
 
@@ -201,3 +201,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 
 *Built with ❤️ and a passion for retro gaming aesthetics*
+
