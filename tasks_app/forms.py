@@ -6,6 +6,11 @@ class DoUsers(forms.Form):
     username = forms.CharField(label = "Username", max_length = 25)
     password = forms.CharField(label = "Password", max_length = 40, widget = forms.PasswordInput)
 
+class ModifyUsers(forms.Form):
+    username = forms.CharField(label = "Username", max_length = 25)
+    password = forms.CharField(label = "Password", max_length = 40, widget = forms.PasswordInput, required = False)
+
+
 # Tasks class
 class DoTasks(forms.Form):
     name = forms.CharField(label = "Task's name", max_length = 30)

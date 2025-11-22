@@ -4,6 +4,7 @@
 {% block title %}Modify User - To-Do App{% endblock %}
 
 {% block content %}
+
 <div class="form-page dashboard-bg">
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg" style="background-color: var(--text-light);">
@@ -87,8 +88,8 @@
                         <p class="mb-2" style="color: var(--text-muted); font-size: 16px;">
                             Need to go back?
                         </p>
-                        <a href="{% url 'return_homepage' %}" class="btn btn-link">
-                            <i class="fas fa-home me-2"></i>Return to Homepage
+                        <a href="{% url 'main' user.id %}" class="btn btn-link">
+                            <i class="fas fa-home me-2"></i>Return to My Page
                         </a>
                     </div>
                     
@@ -100,7 +101,7 @@
                         <p style="color: var(--text-muted); font-size: 16px; margin-bottom: 20px;">
                             This action cannot be undone. All your tasks will be permanently deleted.
                         </p>
-                        <button type="button" class="btn btn-danger btn-lg" onclick="confirmDeleteAccount()" style="background-color: var(--danger-color); border-color: var(--danger-color); font-family: 'VT323', monospace; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">
+                        <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteAccountModal" style="background-color: var(--danger-color); border-color: var(--danger-color); font-family: 'VT323', monospace; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">
                             <i class="fas fa-trash-alt me-2"></i>Delete Account
                         </button>
                     </div>
@@ -110,17 +111,85 @@
     </div>
 </div>
 
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: #ff4f4f; border: 2px solid var(--danger-color); color: white !important;">
+
+            <div class="modal-header">
+                <h5 class="modal-title" style="font-family: 'Orbitron', monospace;">⚠ Confirm Account Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" style="color: white !important;">
+                <p style="font-family: 'VT323', monospace; font-size: 18px;">
+                    To delete your account permanently, please enter your password.
+                </p>
+
+                <div id="modal-error-message" class="text-warning mb-3" style="display:none; font-family: 'VT323', monospace;"></div>
+
+                <form method="POST" action="{% url 'delete_user' user.id %}">
+                    {% csrf_token %}
+                    
+                    <label class="form-label" style="font-family: 'VT323', monospace;">Password</label>
+                    <input type="password" id="deletePasswordInput" name="password" class="form-control mb-3" required>
+
+                    <button type="submit" class="btn btn-dark w-100" style="font-family: 'VT323', monospace;">
+                        <i class="fas fa-trash-alt me-2"></i> Delete My Account Forever
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <script>
-function confirmDeleteAccount() {
-    if (confirm('⚠️ ARE YOU ABSOLUTELY SURE? ⚠️ \n\n  This will permanently delete your account and ALL your tasks.\n\n  This action CANNOT be undone\n\n  Click OK to delete your account forever, or Cancel to keep it.')) {
-        // Get the user ID from the current URL
-        const pathParts = window.location.pathname.split('/');
-        const userId = pathParts[1]; // Assuming URL structure is /<user_id>/<completed>/modify_user
-        
-        // Redirect to delete user URL
-        window.location.href = `/${userId}/delete_user`;
-    }
-}
+document.addEventListener("DOMContentLoaded", function() {
+    const deleteModal = document.getElementById('deleteAccountModal');
+    const passwordInput = document.getElementById('deletePasswordInput');
+
+    deleteModal.addEventListener('shown.bs.modal', function () {
+        passwordInput.focus(); // places the user cursor in the password field
+    });
+});
 </script>
+
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+    <div id="incorrectPassword" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" style="font-family: 'VT323', monospace;">
+                ⚠ Incorrect password. Please try again.
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div id="invalidUser" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" style="font-family: 'VT323', monospace;">
+                ⚠ Username already exists. Please try again
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get('error') === '1') {
+        const toastEl = document.getElementById('incorrectPassword');
+        const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+        toast.show();
+    }
+    if (urlParams.get('error') === '2') {
+        const toastEl = document.getElementById('invalidUser');
+        const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+        toast.show();
+    }
+});
+</script>
+
 
 {% endblock %}
