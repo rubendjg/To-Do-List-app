@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_u$sh%peqhxrphis0mw!(5r__yx)#esded0fd_snof##@^x-yk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["rubentodomanager-b0g4hmewcyd8akb9.spaincentral-01.azurewebsites.net"]
+ALLOWED_HOSTS = ["rubentodomanager-b0g4hmewcyd8akb9.spaincentral-01.azurewebsites.net", "http://rubentodomanager-b0g4hmewcyd8akb9.spaincentral-01.azurewebsites.net"]
 
 
 # Application definition
@@ -130,3 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     "https://rubentodomanager-b0g4hmewcyd8akb9.spaincentral-01.azurewebsites.net",
 ]
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
