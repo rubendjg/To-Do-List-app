@@ -134,7 +134,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://rubentodomanager-b0g4hmewcyd8akb9.spaincentral-01.azurewebsites.net",
 ]
 
-SECURE_PROXY_SSL_HEADER = ("X-Forwarded-Proto", "https")
+# SECURE_PROXY_SSL_HEADER = ("X-Forwarded-Proto", "https")
 # SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
