@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_u$sh%peqhxrphis0mw!(5r__yx)#esded0fd_snof##@^x-yk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["rubentodomanager-b0g4hmewcyd8akb9.spaincentral-01.azurewebsites.net"]
 
 
 # Application definition
@@ -126,3 +126,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://rubentodomanager-b0g4hmewcyd8akb9.spaincentral-01.azurewebsites.net",
+]
