@@ -1,1 +1,2 @@
-django
+Django>=4
+gunicorn
