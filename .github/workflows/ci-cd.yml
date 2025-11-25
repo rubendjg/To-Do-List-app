@@ -51,29 +51,29 @@ jobs:
         coverage run --source='.' manage.py test
         coverage report --fail-under=70
 
-deploy:
-  needs: test
-  runs-on: ubuntu-latest
-  if: github.ref == 'refs/heads/main'
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
-  steps:
-  - uses: actions/checkout@v3
+    steps:
+    - uses: actions/checkout@v3
 
-  - name: Log in to Azure
-    uses: azure/docker-login@v1
-    with:
-      login-server: <your_acr_name>.azurecr.io
-      username: ${{ secrets.AZURE_USERNAME }}
-      password: ${{ secrets.AZURE_PASSWORD }}
+    - name: Log in to Azure
+      uses: azure/docker-login@v1
+      with:
+        login-server: <your_acr_name>.azurecr.io
+        username: ${{ secrets.AZURE_USERNAME }}
+        password: ${{ secrets.AZURE_PASSWORD }}
 
-  - name: Build and push Docker image
-    run: |
-      docker build -t <your_acr_name>.azurecr.io/todoapp:${{ github.sha }} .
-      docker push <your_acr_name>.azurecr.io/todoapp:${{ github.sha }}
+    - name: Build and push Docker image
+      run: |
+        docker build -t <your_acr_name>.azurecr.io/todoapp:${{ github.sha }} .
+        docker push <your_acr_name>.azurecr.io/todoapp:${{ github.sha }}
 
-  - name: Deploy to Azure Web App
-    uses: azure/webapps-deploy@v2
-    with:
-      app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-      slot-name: Production
-      images: <your_acr_name>.azurecr.io/todoapp:${{ github.sha }}
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+        slot-name: Production
+        images: <your_acr_name>.azurecr.io/todoapp:${{ github.sha }}
