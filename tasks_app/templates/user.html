@@ -93,7 +93,7 @@
                             <div class="task-actions">
                                 <form method="POST" action="{% url 'modify_completition_task' user.id task.id %}?next={{ request.path }}" class="d-inline">
                                     {% csrf_token %}
-                                    <input type="image" class="action-icon" src="{% static 'completado.png' %}" alt="Complete" width="90" title="Mark Complete">
+                                    <input type="image" class="action-icon" src="{% static 'Completado.png' %}" alt="Complete" width="90" title="Mark Complete">
                                 </form>
 
                                 <a href="{% url 'modify_task' user.id task.id %}?next={{ request.path }}">
@@ -102,7 +102,7 @@
 
                                 <form method="POST" action="{% url 'delete_task' user.id task.id %}?next={{ request.path }}" class="d-inline">
                                     {% csrf_token %}
-                                    <input type="image" class="action-icon" src="{% static 'eliminar.png' %}" alt="Delete" width="90" onclick="return confirm('Are you sure you want to delete this task?')" title="Delete Task">
+                                    <input type="image" class="action-icon" src="{% static 'Eliminar.png' %}" alt="Delete" width="90" onclick="return confirm('Are you sure you want to delete this task?')" title="Delete Task">
                                 </form>
                             </div>
                         </div>

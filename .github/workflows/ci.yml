@@ -1,0 +1,79 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: todo
+          POSTGRES_PASSWORD: todo
+          POSTGRES_DB: todoapp
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgres://todo:todo@localhost:5432/todoapp
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install coverage
+
+    - name: Run migrations
+      run: |
+        python manage.py migrate
+
+    - name: Run tests with coverage
+      run: |
+        coverage run --source='.' manage.py test
+        coverage report --fail-under=70
+
+deploy:
+  needs: test
+  runs-on: ubuntu-latest
+  if: github.ref == 'refs/heads/main'
+
+  steps:
+  - uses: actions/checkout@v3
+
+  - name: Log in to Azure
+    uses: azure/docker-login@v1
+    with:
+      login-server: <your_acr_name>.azurecr.io
+      username: ${{ secrets.AZURE_USERNAME }}
+      password: ${{ secrets.AZURE_PASSWORD }}
+
+  - name: Build and push Docker image
+    run: |
+      docker build -t <your_acr_name>.azurecr.io/todoapp:${{ github.sha }} .
+      docker push <your_acr_name>.azurecr.io/todoapp:${{ github.sha }}
+
+  - name: Deploy to Azure Web App
+    uses: azure/webapps-deploy@v2
+    with:
+      app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+      slot-name: Production
+      images: <your_acr_name>.azurecr.io/todoapp:${{ github.sha }}
