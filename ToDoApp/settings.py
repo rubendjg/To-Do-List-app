@@ -28,8 +28,7 @@ SECRET_KEY = 'django-insecure-_u$sh%peqhxrphis0mw!(5r__yx)#esded0fd_snof##@^x-yk
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    ".azurewebsites.net",
-    "rubentodomanager-b0g4hmewcyd8akb9.spaincentral-01.azurewebsites.net",
+    "rubentodomanager.azurewebsites.net",
     "127.0.0.1", "localhost"
 ]
 
@@ -151,7 +150,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://rubentodomanager-b0g4hmewcyd8akb9.spaincentral-01.azurewebsites.net",
+    "rubentodomanager.azurewebsites.net",
 ]
 
 #SECURE_PROXY_SSL_HEADER = ("X-Forwarded-Proto", "https")
