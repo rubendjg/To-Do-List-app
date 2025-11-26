@@ -2,6 +2,9 @@ from django.urls import path
 from .views import views
 
 urlpatterns = [
+    # Health view
+    path('health/', views.health, name='health'),
+
     # Welcome page related URLs
     path('', views.index, name = 'index'),
     path('return_homepage', views.return_to_users, name = "return_homepage"),

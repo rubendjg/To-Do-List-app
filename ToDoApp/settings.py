@@ -29,23 +29,28 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     "rubentodomanager.azurewebsites.net",
-    "127.0.0.1", "localhost"
+    "127.0.0.1", 
+    "localhost",
+    "web"
 ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'tasks_app',
+    'django_prometheus',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tasks_app'
+
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -54,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'ToDoApp.urls'
@@ -86,7 +92,7 @@ if DATABASE_URL:
     url = urlparse(DATABASE_URL)
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
+            'ENGINE': 'django_prometheus.db.backends.postgresql',
             'NAME': url.path[1:],   # Remove leading '/'
             'USER': url.username,
             'PASSWORD': url.password,
@@ -148,10 +154,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CSRF_TRUSTED_ORIGINS = [
-    "rubentodomanager.azurewebsites.net",
-]
 
 #SECURE_PROXY_SSL_HEADER = ("X-Forwarded-Proto", "https")
 #SECURE_SSL_REDIRECT = True

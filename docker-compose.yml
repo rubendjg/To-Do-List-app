@@ -2,7 +2,7 @@ services:
   web:
     build: .
     container_name: todoapp_web
-    command: gunicorn ToDoApp.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
+    command: sh -c "python manage.py migrate && gunicorn ToDoApp.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120"
     volumes:
       - .:/app
     ports:
@@ -22,6 +22,27 @@ services:
       POSTGRES_DB: todo_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--web.listen-address=:9090'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+  
+  grafana:
+    image: grafana/grafana
+    container_name: todoapp_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
 
 volumes:
   postgres_data:

@@ -46,7 +46,8 @@ def create_user(request):
             return redirect(signup_url + '?error=1')
         raw_password = form.cleaned_data["password"]
 
-        user = User(username = username, password = raw_password)
+        user = User(username = username)
+        user.set_password(raw_password)
         user.save()
         request.session['user_id'] = user.id
         user_url = reverse('main', args=[user.id])
