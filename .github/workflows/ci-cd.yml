@@ -27,6 +27,8 @@ jobs:
 
     env:
       DATABASE_URL: postgres://todo:todo@localhost:5432/todoapp
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}   # <-- YA FUNCIONA
+      DEBUG: "False"
 
     steps:
       - uses: actions/checkout@v3
@@ -43,14 +45,13 @@ jobs:
           pip install coverage
 
       - name: Run migrations
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: python manage.py migrate
 
       - name: Run tests with coverage
         run: |
           coverage run --source='.' manage.py test
           coverage report --fail-under=70
+
 
   deploy:
     needs: test
@@ -71,7 +72,7 @@ jobs:
           login-server: ${{ secrets.AZURE_ACR_NAME }}.azurecr.io
           username: ${{ secrets.AZURE_ACR_USERNAME }}
           password: ${{ secrets.AZURE_ACR_PASSWORD }}
-          
+
       - name: Build and push Docker image
         run: |
           docker build -t ${{ secrets.AZURE_ACR_NAME }}.azurecr.io/todoapp:${{ github.sha }} .
