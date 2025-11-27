@@ -30,7 +30,7 @@ if not SECRET_KEY:
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "rubentodomanager.azurewebsites.net",
+    "https://rubentodomanager.azurewebsites.net",
     ".azurewebsites.net",
     "127.0.0.1", 
     "localhost",
