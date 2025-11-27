@@ -22,13 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_u$sh%peqhxrphis0mw!(5r__yx)#esded0fd_snof##@^x-yk'
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise Exception("SECRET_KEY environment variable is not set")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = [
     "rubentodomanager.azurewebsites.net",
+    ".azurewebsites.net",
     "127.0.0.1", 
     "localhost",
     "web"
@@ -154,9 +157,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-#SECURE_PROXY_SSL_HEADER = ("X-Forwarded-Proto", "https")
-#SECURE_SSL_REDIRECT = True
-#CSRF_COOKIE_SECURE = True
-#SECURE_SSL_REDIRECT = True
 
